@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model AddOnPay {
+  id         Int      @id @default(autoincrement())
+  bonus      Int      @default(0)
+  deduction  Int      @default(0)
+  date       DateTime @db.Date
+  employeeId Int
+  Employee   Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Attendance {
+  id                 Int      @id @default(autoincrement())
+  time_in            DateTime @db.Time(0)
+  time_out           DateTime @db.Time(0)
+  current_daily_rate Int
+  date               DateTime @db.Date
+  employeeId         Int
+  Employee           Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Employee {
+  id            Int          @id @default(autoincrement())
+  name          String
+  position      String
+  base_salary   Int
+  allowance     Int          @default(0)
+  daily_rate    Int
+  overtime_rate Int
+  time_in       DateTime     @db.Time(0)
+  time_out      DateTime     @db.Time(0)
+  AddOnPay      AddOnPay[]
+  Attendance    Attendance[]
+  Overtime      Overtime[]
+}
+
+model Mock {
+  id           Int      @id @default(autoincrement())
+  name         String
+  base_salary  Int
+  total_salary Int
+  date         DateTime @db.Date
+  time_in      DateTime @db.Time(0)
+  time_out     DateTime @db.Time(0)
+}
+
+model Overtime {
+  id                      Int      @id @default(autoincrement())
+  hours                   Float
+  current_overtime_rate   Int
+  total_overtime_paycheck Int
+  date                    DateTime @db.Date
+  employeeId              Int
+  Employee                Employee @relation(fields: [employeeId], references: [id])
+}
+
+model users {
+  id       String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name     String @db.VarChar(255)
+  email    String @unique
+  password String
+}
