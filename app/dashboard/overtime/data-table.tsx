@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 // import AddButton from "@/app/components/dashboard/button/add";
 // import DeleteButton from "@/app/components/dashboard/button/delete";
-// import OvertimeModal from "./overtimeModal";
+import OvertimeModal from "./overtimeModal";
 
 import * as React from "react";
 import {
@@ -76,9 +76,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        {/* <OvertimeModal />
-        <DeleteButton /> */}
-        <Button>Add</Button>
+        <OvertimeModal />
         <Button>Delete</Button>
       </div>
       <div className="rounded-md border bg-slate-50">

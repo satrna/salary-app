@@ -2,9 +2,9 @@
 import { Button } from "@/components/ui/button";
 // import AddButton from "@/app/components/dashboard/button/add";
 // import DeleteButton from "@/app/components/dashboard/button/delete";
-// import SalaryModal from "./salaryModal";
-// import SalaryDownloaderModal from "./salaryDownloaderModal";
-// import AllDownloaderModal from "./allDownloaderModal";
+import SalaryModal from "./salaryModal";
+import SalaryDownloaderModal from "./salaryDownloaderModal";
+import AllDownloaderModal from "./allDownloaderModal";
 
 import * as React from "react";
 import {
@@ -79,10 +79,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        {/* <SalaryModal />
-        <DeleteButton />
+        <SalaryModal />
+        <Button>Delete</Button>
         <SalaryDownloaderModal />
-        <AllDownloaderModal /> */}
+        <AllDownloaderModal />
       </div>
       <div className="rounded-md border bg-slate-50">
         <Table>

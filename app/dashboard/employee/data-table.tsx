@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 // import AddButton from "@/app/components/dashboard/button/add";
 // import DeleteButton from "@/app/components/dashboard/button/delete";
-// import EmployeeModal from "./employeeModal";
+import EmployeeModal from "./employeeModal";
 
 import * as React from "react";
 import {
@@ -76,9 +76,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        {/* <EmployeeModal />
-        <DeleteButton /> */}
-        <Button className="bg-green-400">Add</Button>
+        <EmployeeModal />
         <Button className="bg-red-400">Delete</Button>
       </div>
       <div className="rounded-md border bg-slate-50">
