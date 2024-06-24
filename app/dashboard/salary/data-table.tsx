@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <SalaryModal />
-        <Button>Delete</Button>
+        <Button className="bg-red-500">Delete</Button>
         <SalaryDownloaderModal />
         <AllDownloaderModal />
       </div>

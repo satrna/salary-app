@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <EmployeeModal />
-        <Button className="bg-red-400">Delete</Button>
+        <Button className="bg-red-500">Delete</Button>
       </div>
       <div className="rounded-md border bg-slate-50">
         <Table>

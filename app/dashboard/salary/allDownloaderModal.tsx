@@ -9,6 +9,7 @@ import {
   useDisclosure,
   Input,
   DateRangePicker,
+  DatePicker
 } from "@nextui-org/react";
 
 export default function AllDownloaderModal() {
@@ -16,7 +17,7 @@ export default function AllDownloaderModal() {
 
   return (
     <>
-      <Button onPress={onOpen} color="secondary">
+      <Button onPress={onOpen} className="bg-white">
         Download Total
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
@@ -27,7 +28,18 @@ export default function AllDownloaderModal() {
                 Download All Employees Salary
               </ModalHeader>
               <ModalBody>
-                <DateRangePicker label="Stay duration" className="max-w-xs" />
+                <DatePicker
+                  name="firstDate"
+                  isRequired
+                  label="First Date"
+                  className="max-w-[284px]"
+                />
+                <DatePicker
+                  name="lastDate"
+                  isRequired
+                  label="Last Date"
+                  className="max-w-[284px]"
+                />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
