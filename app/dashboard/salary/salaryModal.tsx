@@ -29,26 +29,31 @@ export default function SalaryModal() {
               </ModalHeader>
               <ModalBody>
                 <Input
+                  isRequired
                   autoFocus
                   label="Name"
                   placeholder="Enter your name"
                   variant="bordered"
                 />
                 <Input
+                  isRequired
                   autoFocus
                   label="Bonus"
                   type="Number"
+                  defaultValue="0"
                   placeholder="Enter the bonus"
                   variant="bordered"
                 />
                 <Input
                   autoFocus
+                  isRequired
                   label="Deductions"
+                  defaultValue="0"
                   type="Number"
                   placeholder="Enter the deductions"
                   variant="bordered"
                 />
-                <DatePicker label="Date" className="max-w-[284px]" />
+                <DatePicker isRequired label="Date" className="max-w-[284px]" />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>

@@ -7,21 +7,21 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const overtime = await prisma.overtime.findMany({
+    const overtimeRecords = await prisma.overtime.findMany({
       include: {
         Employee: {
           select: {
             name: true,
-            position: true
-          }
-        }
-      }
+            position: true,
+          },
+        },
+      },
     });
-    return NextResponse.json(overtime);
+    return NextResponse.json(overtimeRecords);
   } catch (error) {
-    console.error("Error fetching mocks:", error);
+    console.error("Error fetching overtime records:", error);
     return NextResponse.json(
-      { error: "Failed to fetch mocks" },
+      { error: "Failed to fetch overtime records" },
       { status: 500 }
     );
   } finally {
@@ -32,43 +32,48 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { name, salary, date, time_in, time_out } = data;
+    const { name, hours, date } = data;
 
     // Ensure the necessary fields are present
-    if (!name || !salary || !date || !time_in || !time_out) {
+    if (!name || !hours || !date) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Calculate base_salary and total_salary
-    const base_salary = Math.floor(salary / 21);
-
-    const timeIn = new Date(time_in);
-    const timeOut = new Date(time_out);
-
-    // Calculate the total hours worked in milliseconds
-    const hoursWorked =
-      (timeOut.getTime() - timeIn.getTime()) / (1000 * 60 * 60); // Convert milliseconds to hours
-
-    // Calculate total_salary
-    const total_salary = Math.floor(hoursWorked * base_salary);
-
-    // Create a new mock record in the database
-    const newMock = await prisma.mock.create({
-      data: {
-        name,
-        base_salary,
-        total_salary,
-        date: new Date(date),
-        time_in: timeIn,
-        time_out: timeOut,
+    const rel_user = await prisma.employee.findFirst({
+      where: {
+        name: name,
       },
     });
 
-    return NextResponse.json(newMock, { status: 201 });
+    if (!rel_user) {
+      return NextResponse.json(
+        { error: "Employee not found" },
+        { status: 404 }
+      );
+    }
+
+    const current_overtime_rate = rel_user.overtime_rate;
+    const employee_id = rel_user.id;
+
+    // Calculate the total overtime paycheck
+    const total_overtime_paycheck = Math.floor(current_overtime_rate * hours);
+
+    // Create a new overtime record in the database
+    const newOvertimeRecord = await prisma.overtime.create({
+      data: {
+        hours: hours,
+        current_overtime_rate: current_overtime_rate,
+        total_overtime_paycheck: total_overtime_paycheck,
+        date: new Date(date),
+        employeeId: employee_id,
+      },
+    });
+
+    return NextResponse.json(newOvertimeRecord, { status: 201 });
   } catch (error) {
-    console.error("Error creating mock:", error);
+    console.error("Error creating overtime record:", error);
     return NextResponse.json(
-      { error: "Failed to create mock" },
+      { error: "Failed to create overtime record" },
       { status: 500 }
     );
   } finally {

@@ -30,19 +30,21 @@ export default function AttendanceModal() {
               <ModalBody>
                 <Input
                   autoFocus
+                  isRequired
+                  name="name"
                   label="Name"
                   placeholder="Enter your name"
                   variant="bordered"
                 />
-                <TimeInput label="TimeIn" />
-                <TimeInput label="TimeOut" />
-                <DatePicker label="Date" className="max-w-[284px]" />
+                <TimeInput name="timein" isRequired label="TimeIn" />
+                <TimeInput name="timeout" isRequired label="TimeOut" />
+                <DatePicker name="date" isRequired label="Date" className="max-w-[284px]" />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button type="submit" color="primary" onPress={onClose}>
                   Save
                 </Button>
               </ModalFooter>

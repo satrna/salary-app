@@ -12,16 +12,16 @@ export async function GET() {
         Employee: {
           select: {
             name: true,
-            position: true
-          }
-        }
-      }
+            position: true,
+          },
+        },
+      },
     });
     return NextResponse.json(overtime);
   } catch (error) {
-    console.error("Error fetching mocks:", error);
+    console.error("Error fetching attendance records:", error);
     return NextResponse.json(
-      { error: "Failed to fetch mocks" },
+      { error: "Failed to fetch attendance records" },
       { status: 500 }
     );
   } finally {
@@ -32,15 +32,32 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { name, salary, date, time_in, time_out } = data;
+    const { name, time_in, time_out, date } = data;
 
     // Ensure the necessary fields are present
-    if (!name || !salary || !date || !time_in || !time_out) {
+    if (!name || !date || !time_in || !time_out) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    const rel_user = await prisma.employee.findFirst({
+      where: {
+        name: name,
+      },
+    });
+
+    if (!rel_user) {
+      return NextResponse.json(
+        { error: "Employee not found" },
+        { status: 404 }
+      );
+    }
+
+    const salary = rel_user.base_salary;
+    const employee_id = rel_user.id;
+
     // Calculate base_salary and total_salary
     const base_salary = Math.floor(salary / 21);
+
 
     const timeIn = new Date(time_in);
     const timeOut = new Date(time_out);
@@ -52,23 +69,22 @@ export async function POST(request: NextRequest) {
     // Calculate total_salary
     const total_salary = Math.floor(hoursWorked * base_salary);
 
-    // Create a new mock record in the database
-    const newMock = await prisma.mock.create({
+    // Create a new attendance record in the database
+    const newAttendance = await prisma.attendance.create({
       data: {
-        name,
-        base_salary,
-        total_salary,
-        date: new Date(date),
         time_in: timeIn,
         time_out: timeOut,
+        current_daily_rate: total_salary,
+        date: new Date(date),
+        employeeId: employee_id,
       },
     });
 
-    return NextResponse.json(newMock, { status: 201 });
+    return NextResponse.json(newAttendance, { status: 201 });
   } catch (error) {
-    console.error("Error creating mock:", error);
+    console.error("Error creating attendance record:", error);
     return NextResponse.json(
-      { error: "Failed to create mock" },
+      { error: "Failed to create attendance record" },
       { status: 500 }
     );
   } finally {

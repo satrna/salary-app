@@ -7,21 +7,21 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const mocks = await prisma.addOnPay.findMany({
+    const addOnPayRecords = await prisma.addOnPay.findMany({
       include: {
         Employee: {
           select: {
             name: true,
-            position: true
-          }
-        }
-      }
+            position: true,
+          },
+        },
+      },
     });
-    return NextResponse.json(mocks);
+    return NextResponse.json(addOnPayRecords);
   } catch (error) {
-    console.error("Error fetching mocks:", error);
+    console.error("Error fetching add-on pay records:", error);
     return NextResponse.json(
-      { error: "Failed to fetch mocks" },
+      { error: "Failed to fetch add-on pay records" },
       { status: 500 }
     );
   } finally {
@@ -32,43 +32,43 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { name, salary, date, time_in, time_out } = data;
+    const { name, bonus, deduction, date } = data;
 
     // Ensure the necessary fields are present
-    if (!name || !salary || !date || !time_in || !time_out) {
+    if (!name || bonus == null || deduction == null || !date) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Calculate base_salary and total_salary
-    const base_salary = Math.floor(salary / 21);
-
-    const timeIn = new Date(time_in);
-    const timeOut = new Date(time_out);
-
-    // Calculate the total hours worked in milliseconds
-    const hoursWorked =
-      (timeOut.getTime() - timeIn.getTime()) / (1000 * 60 * 60); // Convert milliseconds to hours
-
-    // Calculate total_salary
-    const total_salary = Math.floor(hoursWorked * base_salary);
-
-    // Create a new mock record in the database
-    const newMock = await prisma.mock.create({
-      data: {
-        name,
-        base_salary,
-        total_salary,
-        date: new Date(date),
-        time_in: timeIn,
-        time_out: timeOut,
+    const rel_user = await prisma.employee.findFirst({
+      where: {
+        name: name,
       },
     });
 
-    return NextResponse.json(newMock, { status: 201 });
+    if (!rel_user) {
+      return NextResponse.json(
+        { error: "Employee not found" },
+        { status: 404 }
+      );
+    }
+
+    const employee_id = rel_user.id;
+
+    // Create a new add-on pay record in the database
+    const newAddOnPayRecord = await prisma.addOnPay.create({
+      data: {
+        bonus: bonus,
+        deduction: deduction,
+        date: new Date(date),
+        employeeId: employee_id,
+      },
+    });
+
+    return NextResponse.json(newAddOnPayRecord, { status: 201 });
   } catch (error) {
-    console.error("Error creating mock:", error);
+    console.error("Error creating add-on pay record:", error);
     return NextResponse.json(
-      { error: "Failed to create mock" },
+      { error: "Failed to create add-on pay record" },
       { status: 500 }
     );
   } finally {
