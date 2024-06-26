@@ -106,6 +106,9 @@ export default function AllDownloaderModal() {
                     Close
                   </Button>
                   <SubmitButton onSuccess={handleFormSuccess} />
+                  <Button className="bg-green-400" variant="flat" onPress={onClose}>
+                    Download
+                  </Button>
                 </ModalFooter>
               </form>
             </>
