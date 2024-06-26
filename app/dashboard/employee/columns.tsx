@@ -99,9 +99,9 @@ export const columns: ColumnDef<Main>[] = [
             <DropdownMenuItem>
               <ChangeEmployeeModal />
             </DropdownMenuItem>
-            {/* <DropdownMenuItem className="hover:bg-red-500">
+            <DropdownMenuItem className="hover:bg-red-500">
               Delete
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -35,7 +35,7 @@ export default function ChangeEmployeeModal() {
   return (
     <>
       <Button onPress={onOpen} radius="none" variant="light">
-        Add Data
+        Change Data
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>

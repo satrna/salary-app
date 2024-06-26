@@ -18,7 +18,7 @@ export default function ChangeAttendanceModal() {
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Add Data
+        Change Data
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
