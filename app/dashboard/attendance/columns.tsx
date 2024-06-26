@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { DeleteAttendance } from "./delete";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -153,7 +154,7 @@ export const columns: ColumnDef<Main>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>Change Data</DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-red-500">Delete</DropdownMenuItem>
+            <DropdownMenuItem><DeleteAttendance id={attendance.id} /></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

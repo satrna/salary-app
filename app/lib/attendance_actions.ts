@@ -101,3 +101,20 @@ export async function createAttendance(
     return { message: "Failed to create attendance" };
   }
 }
+
+export async function deleteAttendance(id: number) {
+  // throw new Error('Failed to Delete Invoice');
+  console.log(id);
+  try {
+    const deleteAttendance = await prisma.attendance.delete({
+      where: {
+        id: id,
+      }
+    })
+    
+    revalidatePath("/dashboard/attendance");
+    return { message: 'Deleted Attendance' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete attendance.' };
+  }
+}

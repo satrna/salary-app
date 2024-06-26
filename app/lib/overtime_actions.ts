@@ -68,3 +68,20 @@ export async function createOvertime(
     return { message: "Failed to create overtime" };
   }
 }
+
+export async function deleteOvertime(id: number) {
+  // throw new Error('Failed to Delete Invoice');
+  console.log(id);
+  try {
+    const deleteOvertime = await prisma.overtime.delete({
+      where: {
+        id: id,
+      }
+    })
+    
+    revalidatePath("/dashboard/overtime");
+    return { message: 'Deleted overtime' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete overtime.' };
+  }
+}

@@ -2,8 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-// import SalaryModal from "./salaryModal";
-
+import ChangeSalaryModal from "./changeSalaryModal";
+import { useState } from "react"; // Import useState
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DeleteSalary } from "./delete";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -121,7 +122,7 @@ export const columns: ColumnDef<Main>[] = [
     id: "actions",
     cell: ({ row }) => {
       const salary = row.original;
-
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -133,10 +134,10 @@ export const columns: ColumnDef<Main>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              {/* <SalaryModal /> */}
+              <ChangeSalaryModal/>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-red-500">
-              Delete
+            <DropdownMenuItem>
+             <DeleteSalary id={salary.id} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

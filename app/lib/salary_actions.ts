@@ -61,3 +61,20 @@ export async function createSalary(
     return { message: "Failed to create todo" };
   }
 }
+
+export async function deleteSalary(id: number) {
+  // throw new Error('Failed to Delete Invoice');
+  console.log(id);
+  try {
+    const deleteSalary = await prisma.addOnPay.delete({
+      where: {
+        id: id,
+      }
+    })
+    
+    revalidatePath("/dashboard/salary");
+    return { message: 'Deleted salary' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete salary.' };
+  }
+}

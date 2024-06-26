@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import { DeleteOvertime } from "./delete";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -135,7 +135,7 @@ export const columns: ColumnDef<Main>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>Change Data</DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-red-500">Delete</DropdownMenuItem>
+            <DropdownMenuItem><DeleteOvertime id={overtime.id} /></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
