@@ -49,6 +49,7 @@ export const columns: ColumnDef<Main>[] = [
   },
   {
     accessorKey: "Employee.name",
+    id: "name",
     header: ({ column }) => {
       return (
         <Button
