@@ -10,7 +10,7 @@ import {
   Input,
   TimeInput,
 } from "@nextui-org/react";
-import { createEmployee } from "@/app/lib/actions";
+import { createEmployee } from "@/app/lib/newEmployeeAction";
 import { useFormStatus } from "react-dom";
 import { useFormState } from "react-dom";
 
