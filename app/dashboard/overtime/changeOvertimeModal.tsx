@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Modal,
@@ -11,38 +12,34 @@ import {
   TimeInput,
   DatePicker,
 } from "@nextui-org/react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { createOvertime } from "@/app/lib/overtime_actions";
-import { useFormState } from "react-dom";
+import { createOvertime } from "@/app/lib/actions";
+import { useFormState } from 'react-dom'
 
 const initialState = {
   message: "",
 };
 
-type OnSuccessHandler = () => void;
-
-export function SubmitButton({ onSuccess }: { onSuccess: OnSuccessHandler }) {
-  // Added onSuccess prop
-  const { pending } = useFormStatus();
-
+export function SubmitButton() {
+  const { pending } = useFormStatus()
+ 
   return (
-    <Button type="submit" disabled={pending} onPress={onSuccess}>
+    <Button type="submit" disabled={pending}>
       Save
     </Button>
-  );
+  )
 }
 
-export default function OvertimeModal() {
+export default function ChangeOvertimeModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // const { pending } = useFormStatus()
   const [state, formAction] = useFormState(createOvertime, initialState);
-  const handleFormSuccess = () => {
-    onOpenChange(); // Close the modal
-    // Optionally, reset form fields, display a success message, etc.
-  };
+
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Add Data
+        Change Data
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
@@ -50,17 +47,9 @@ export default function OvertimeModal() {
             <>
               <form action={formAction}>
                 <ModalHeader className="flex flex-col gap-1">
-                  Add Overtime
+                  Change Data
                 </ModalHeader>
                 <ModalBody>
-                  <Input
-                    isRequired
-                    autoFocus
-                    label="Name"
-                    name="name"
-                    placeholder="Enter your name"
-                    variant="bordered"
-                  />
                   <Input
                     isRequired
                     autoFocus
@@ -89,7 +78,7 @@ export default function OvertimeModal() {
                   >
                     Save
                   </Button> */}
-                  <SubmitButton onSuccess={handleFormSuccess} />
+                  <SubmitButton />
                 </ModalFooter>
                 <p aria-live="polite" className="sr-only" role="status">
                   {state?.message}

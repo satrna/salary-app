@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import ChangeEmployeeModal from "./changeEmployeeModal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -24,7 +24,10 @@ export type Main = {
 };
 
 function formatRupiah(amount: number): string {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(amount);
 }
 
 export const columns: ColumnDef<Main>[] = [
@@ -81,7 +84,7 @@ export const columns: ColumnDef<Main>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const employee = row.original;
 
       return (
         <DropdownMenu>
@@ -93,8 +96,12 @@ export const columns: ColumnDef<Main>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Change Data</DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-red-500">Delete</DropdownMenuItem>
+            <DropdownMenuItem>
+              <ChangeEmployeeModal />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-red-500">
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

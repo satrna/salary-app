@@ -121,7 +121,7 @@ export const columns: ColumnDef<Main>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const overtime = row.original;
 
       return (
         <DropdownMenu>

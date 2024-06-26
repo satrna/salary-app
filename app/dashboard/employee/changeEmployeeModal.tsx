@@ -10,7 +10,7 @@ import {
   Input,
   TimeInput,
 } from "@nextui-org/react";
-import { createEmployee } from "@/app/lib/newEmployeeAction";
+import { createEmployee } from "@/app/lib/actions";
 import { useFormStatus } from "react-dom";
 import { useFormState } from "react-dom";
 
@@ -18,29 +18,23 @@ const initialState = {
   message: "",
 };
 
-type OnSuccessHandler = () => void;
-
-export function SubmitButton({ onSuccess} :{ onSuccess: OnSuccessHandler }) { // Added onSuccess prop
+export function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending} onPress={onSuccess}>
+    <Button type="submit" disabled={pending}>
       Save
     </Button>
   );
 }
 
-export default function EmployeeModal() {
+export default function ChangeEmployeeModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [state, formAction] = useFormState(createEmployee, initialState);
-  const handleFormSuccess = () => {
-    onOpenChange(); // Close the modal
-    // Optionally, reset form fields, display a success message, etc.
-  };
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
+      <Button onPress={onOpen} radius="none" variant="light">
         Add Data
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
@@ -49,7 +43,7 @@ export default function EmployeeModal() {
             <>
               <form action={formAction}>
                 <ModalHeader className="flex flex-col gap-1">
-                  Add Employee
+                  Change Data
                 </ModalHeader>
                 <ModalBody>
                   <Input
@@ -87,20 +81,20 @@ export default function EmployeeModal() {
                     variant="bordered"
                   />
                   <TimeInput
+                    hourCycle={24}
                     isRequired
                     name="timeinput"
                     label="TimeIn"
-                    hourCycle={24}
                   />
                   <TimeInput
+                    hourCycle={24}
                     isRequired
                     name="timeoutput"
                     label="TimeOut"
-                    hourCycle={24}
                   />
-                  <div aria-live="polite" className="sr-only" role="status">
+                  <p aria-live="polite" className="sr-only" role="status">
                     {state?.message}
-                  </div>
+                  </p>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="flat" onPress={onClose}>
@@ -109,7 +103,7 @@ export default function EmployeeModal() {
                   {/* <Button color="primary" type="submit" onPress={onClose}>
                   Save
                 </Button> */}
-                  <SubmitButton onSuccess={handleFormSuccess} />
+                  <SubmitButton />
                 </ModalFooter>
               </form>
             </>

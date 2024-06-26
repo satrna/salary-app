@@ -2,7 +2,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+
 
 const prisma = new PrismaClient();
 
@@ -13,29 +13,33 @@ export async function createOvertime(
   },
   formData: FormData
 ) {
-  const schema = z.object({
-    name: z.string().min(1),
-    hours: z.number(),
-    date: z.string().date(),
-  });
-  const parse = schema.safeParse({
-    name: formData.get("name"),
-    hours: formData.get("hours"),
-    date: formData.get("date"),
-  });
+  // const schema = z.object({
+  //   name: z.string().min(1),
+  //   hours: z.number(),
+  //   date: z.string().date(),
+  // });
+  const data = {
+    name: formData.get("name") as string,
+    hours: parseFloat(formData.get("hours") as string),
+    date: formData.get("date") as string,
+  };
 
-  if (!parse.success) {
+  if (!data.name || !data.hours || !data.date) {
+    console.error("Something went null");
+    console.error(data);
     return { message: "Failed to create overtime" };
   }
 
-  const my_data = parse.data;
 
   try {
     const rel_user = await prisma.employee.findFirst({
-      where: { name: { contains: my_data.name } },
+      where: {
+        name: data.name,
+      },
     });
-
+    
     if (!rel_user) {
+      console.error("Could not find employee")
       return { message: "Failed to create overtime" };
     }
 
@@ -44,22 +48,23 @@ export async function createOvertime(
 
     // Calculate the total overtime paycheck
     const total_overtime_paycheck = Math.floor(
-      current_overtime_rate * my_data.hours
+      current_overtime_rate * data.hours
     );
 
     // Create a new overtime record in the database
     const newOvertimeRecord = await prisma.overtime.create({
       data: {
-        hours: my_data.hours,
+        hours: data.hours,
         current_overtime_rate: current_overtime_rate,
         total_overtime_paycheck: total_overtime_paycheck,
-        date: new Date(my_data.date),
+        date: new Date(data.date),
         employeeId: employee_id,
       },
     });
     revalidatePath("/dashboard/overtime");
     return { message: "Added overtime" };
-  } catch (e) {
+  } catch (error) {
+    console.error("Error creating salary:", error);
     return { message: "Failed to create overtime" };
   }
 }
